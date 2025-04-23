@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MusicPlayer</title>
+  <link rel="stylesheet" href="stye.css"/>
+  <script defer src="script.js"></script>
+  <script src="https://kit.fontawesome.com/ec668d8e2b.js" crossorigin="anonymous"></script>
+  <link rel="manifest" href="/manifest.json">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js');
+      });
+    }
+  </script>
+</head>
+<body>
+  <nav>
+    <ul>
+      <li class="brand"><img src="Logo.png" alt="MusicPlayer">MusicPlayer</li>
+      <li>Home</li>
+      <li>About</li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <div class="songlist">
+      <h1>Best Playlist</h1>
+      <div class="songItemContainer" id="songItemContainer">
+        <!-- Songs inserted by JS -->
+      </div>
+    </div>
+    <div class="songbanner"></div>
+  </div>
+
+  <div class="bottom">
+    <input type="range" id="myProgressBar" min="0" value="0" max="100"/>
+    <div class="icons">
+      <i class="fa-solid fa-backward-step fa-3x" id="previous"></i>
+      <i class="far fa-play-circle fa-3x" id="masterplay"></i>
+      <i class="fa-solid fa-forward-step fa-3x" id="next"></i>
+      <button id="shuffle" class="fa fa-random fa-3x"></button>
+      <button id="loop" class="fa fa-redo fa-3x"></button>
+    </div>
+    <div class="songInfo">
+      <img src="play.gif" width="50px" alt="" id="gif" />
+      <span id="masterSongName">Not Playing</span>
+    </div>
+  </div>
+</body>
+</html>
