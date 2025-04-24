@@ -1,6 +1,6 @@
 const cacheName = 'musicPlayer-v1';
 const staticAssets = [
-  '/MusicPlayer/',
+'/MusicPlayer/',
   '/MusicPlayer/index.html',
   '/MusicPlayer/stye.css',
   '/MusicPlayer/script.js',
@@ -75,8 +75,9 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
     caches.open(cacheName).then((cache) => {
-      console.log('[Service Worker] Caching static assets');
-      return cache.addAll(staticAssets);
+      return cache.addAll(staticAssets).catch((err) => {
+        console.error('Failed to cache static assets:', err);
+      });
     })
   );
 });
@@ -85,7 +86,9 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
       Promise.all(
-        keys.filter((key) => key !== cacheName).map((key) => caches.delete(key))
+        keys
+          .filter((key) => key !== cacheName)
+          .map((key) => caches.delete(key))
       )
     )
   );
@@ -94,7 +97,17 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      return cachedResponse || fetch(event.request);
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+
+      return fetch(event.request).then((networkResponse) => {
+        return caches.open(cacheName).then((cache) => {
+          cache.put(event.request, networkResponse.clone());
+          return networkResponse;
+        });
+      });
     })
   );
 });
+
