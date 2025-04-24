@@ -1,6 +1,6 @@
-const cacheName = 'musicPlayer-v1';
-const staticAssets = [
-'/MusicPlayer/',
+const cacheName = 'music-player-cache-v1';
+const assets = [
+  '/MusicPlayer/',
   '/MusicPlayer/index.html',
   '/MusicPlayer/stye.css',
   '/MusicPlayer/script.js',
@@ -71,41 +71,37 @@ const staticAssets = [
   '/MusicPlayer/songs/9-Sanson ki Mala.webm'
 ];
 
+// Install event
 self.addEventListener('install', (event) => {
-  self.skipWaiting();
+  console.log('[Service Worker] Installing and caching all static assets');
   event.waitUntil(
     caches.open(cacheName).then((cache) => {
-      return cache.addAll(staticAssets).catch((err) => {
-        console.error('Failed to cache static assets:', err);
-      });
+      return cache.addAll(assets);
+    }).catch((err) => {
+      console.error('[Service Worker] Failed to cache assets', err);
     })
   );
 });
 
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(
-        keys
-          .filter((key) => key !== cacheName)
-          .map((key) => caches.delete(key))
-      )
-    )
-  );
-});
-
+// Fetch event
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
+    caches.match(event.request).then((response) => {
+      // Serve from cache if available
+      if (response) return response;
 
-      return fetch(event.request).then((networkResponse) => {
-        return caches.open(cacheName).then((cache) => {
-          cache.put(event.request, networkResponse.clone());
-          return networkResponse;
+      // Fetch from network if not cached
+      return fetch(event.request).then((fetchRes) => {
+        if (!fetchRes || fetchRes.status !== 200) return fetchRes;
+
+        const fetchResClone = fetchRes.clone();
+        caches.open(cacheName).then((cache) => {
+          cache.put(event.request, fetchResClone);
         });
+        return fetchRes;
+      }).catch(() => {
+        // Fallback when offline and not cached
+        return caches.match('/offline.html');
       });
     })
   );
