@@ -1,22 +1,21 @@
 {
-    "name": "Music Player",
-    "short_name": "MusicPlayer",
-    "description": "Offline music player",
-    "start_url": "https://devgenius-sins.github.io/MusicPlayer/",
-    "display": "standalone",
-    "background_color": "#121212",
-    "theme_color": "#1db954",
-    "icons": [
-      {
-        "src": "icons/icon-192x192.png",
-        "sizes": "192x192",
-        "type": "image/png"
-      },
-      {
-        "src": "icons/icon-512x512.png",
-        "sizes": "512x512",
-        "type": "image/png"
-      }
-    ]
-  }
-  
+  "name": "Music Player",
+  "short_name": "MusicPlayer",
+  "description": "Offline music player",
+  "start_url": "/MusicPlayer/",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#1db954",
+  "icons": [
+    {
+      "src": "icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
