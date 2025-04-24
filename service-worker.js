@@ -2,7 +2,7 @@ const cacheName = 'musicPlayer-v1';
 const staticAssets = [
   '/MusicPlayer/',
   '/MusicPlayer/index.html',
-  '/MusicPlayer/style.css',
+  '/MusicPlayer/stye.css',
   '/MusicPlayer/script.js',
   '/MusicPlayer/manifest.json',
   '/MusicPlayer/Logo.png',
